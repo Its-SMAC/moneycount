@@ -1,9 +1,9 @@
-"use client";
+"use server";
 
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
-export async function criarTransacao(formData: FormData) {
+export async function criarTransacao(prevState: unknown, formData: FormData) {
   const supabase = await createClient();
 
   const {
