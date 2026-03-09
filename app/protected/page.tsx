@@ -52,7 +52,8 @@ async function Dashboard() {
           <div className="flex flex-col gap-1 p-4 rounded-lg border">
             <span className="text-sm text-muted-foreground">Receitas</span>
             <span className="text-2xl font-bold text-green-500">
-              +{receitas.toFixed(2)}€
+              {receitas > 0 ? "+" : ""}
+              {receitas.toFixed(2)}€
             </span>
           </div>
           <div className="flex flex-col gap-1 p-4 rounded-lg border">

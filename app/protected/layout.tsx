@@ -4,6 +4,7 @@ import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 import { Suspense } from "react";
 import Image from "next/image";
+import { InstalarPWA } from "@/components/instalar-pwa";
 
 export default function ProtectedLayout({
   children,
@@ -39,6 +40,7 @@ export default function ProtectedLayout({
         </div>
       </div>
       <footer className="w-full flex items-center justify-center py-4 text-xs text-muted-foreground gap-2 border-t">
+        <InstalarPWA />
         Feito por{" "}
         <a
           href="https://github.com/Its-SMAC"

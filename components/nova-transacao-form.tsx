@@ -20,7 +20,12 @@ export function NovaTransacaoForm({
       <form action={formAction} className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
           <label htmlFor="tipo">Tipo</label>
-          <select className="rounded-sm p-2" name="tipo" id="tipo" required>
+          <select
+            className="rounded-sm p-2 bg-background border border-border w-full"
+            name="tipo"
+            id="tipo"
+            required
+          >
             <option value="despesa">Despesa</option>
             <option value="receita">Receita</option>
           </select>
@@ -29,7 +34,7 @@ export function NovaTransacaoForm({
         <div className="flex flex-col gap-1">
           <label htmlFor="valor">Valor (€)</label>
           <input
-            className="rounded-sm p-2"
+            className="rounded-sm p-2 bg-background border border-border w-full"
             type="number"
             name="valor"
             id="valor"
@@ -42,7 +47,7 @@ export function NovaTransacaoForm({
         <div className="flex flex-col gap-1">
           <label htmlFor="categoria_id">Categoria</label>
           <select
-            className="rounded-sm p-2"
+            className="rounded-sm p-2 bg-background border border-border w-full"
             name="categoria_id"
             id="categoria_id"
             required
@@ -58,7 +63,7 @@ export function NovaTransacaoForm({
         <div className="flex flex-col gap-1">
           <label htmlFor="descricao">Descrição</label>
           <input
-            className="rounded-sm p-2"
+            className="rounded-sm p-2 bg-background border border-border w-full"
             type="text"
             name="descricao"
             id="descricao"
@@ -68,7 +73,7 @@ export function NovaTransacaoForm({
         <div className="flex flex-col gap-1">
           <label htmlFor="data">Data</label>
           <input
-            className="rounded-sm p-2"
+            className="rounded-sm p-2 bg-background border border-border w-full"
             type="date"
             name="data"
             id="data"
@@ -77,7 +82,7 @@ export function NovaTransacaoForm({
         </div>
 
         <button
-          className="bg-slate-700 mt-4 p-2 rounded-lg hover:bg-slate-600 transition-colors duration-200 text-2xl"
+          className="bg-primary text-primary-foreground mt-4 p-2 rounded-lg hover:opacity-90 transition-opacity duration-200 text-xl w-full"
           type="submit"
         >
           Guardar

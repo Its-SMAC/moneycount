@@ -47,9 +47,9 @@ export function SaldoDonut({ receitas, despesas }: Props) {
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-sm text-muted-foreground">Saldo</span>
           <span
-            className={`text-xl font-bold ${saldo >= 0 ? "text-green-500" : "text-red-500"}`}
+            className={`text-xl font-bold ${saldo > 0 ? "text-green-500" : saldo < 0 ? "text-red-500" : "text-foreground"}`}
           >
-            {saldo >= 0 ? "+" : ""}
+            {saldo > 0 ? "+" : saldo < 0 ? "-" : ""}
             {saldo.toFixed(2)}€
           </span>
         </div>
