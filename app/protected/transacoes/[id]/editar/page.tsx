@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { editarTransacao } from "../../actions";
+export const dynamic = "force-dynamic";
 
 async function FormularioEditar({ id }: { id: string }) {
   const supabase = await createClient();
