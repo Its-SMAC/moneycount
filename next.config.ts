@@ -3,6 +3,17 @@ import withPWA from "@ducanh2912/next-pwa";
 
 const nextConfig: NextConfig = {
   turbopack: {},
+  headers: async () => [
+    {
+      source: "/manifest.json",
+      headers: [
+        {
+          key: "Content-Type",
+          value: "application/manifest+json",
+        },
+      ],
+    },
+  ],
 };
 
 export default withPWA({
