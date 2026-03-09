@@ -1,31 +1,53 @@
-"use client";
-
-import { criarTransacao } from "@/app/protected/transacoes/actions";
+import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { useActionState } from "react";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import { editarTransacao } from "../../actions";
 
-export function NovaTransacaoForm({
-  categorias,
-}: {
-  categorias: { id: string; nome: string }[];
-}) {
-  const [state, formAction] = useActionState(criarTransacao, null);
+async function FormularioEditar({ id }: { id: string }) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/auth/login");
+
+  const { data: transacao } = await supabase
+    .from("transacoes")
+    .select("id, valor, descricao, tipo, data, categoria_id")
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .single();
+
+  if (!transacao) redirect("/protected/transacoes");
+
+  const { data: categorias } = await supabase
+    .from("categorias")
+    .select("id, nome")
+    .or(`user_id.eq.${user.id},user_id.is.null`)
+    .order("nome");
 
   return (
     <div className="max-w-md mx-auto flex flex-col gap-6">
-      <h1 className="text-4xl font-bold text-center">Nova Transação</h1>
+      <h1 className="text-4xl font-bold text-center">Editar Transação</h1>
 
-      {state?.erro && <p className="text-red-500 text-sm">{state.erro}</p>}
+      <form action={editarTransacao} className="flex flex-col gap-4">
+        <input type="hidden" name="id" value={transacao.id} />
 
-      <form action={formAction} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 ">
           <label htmlFor="tipo">Tipo</label>
-          <select className="rounded-sm p-2" name="tipo" id="tipo" required>
+          <select
+            className="rounded-sm p-2"
+            name="tipo"
+            id="tipo"
+            defaultValue={transacao.tipo}
+            required
+          >
             <option value="despesa">Despesa</option>
             <option value="receita">Receita</option>
           </select>
         </div>
-
         <div className="flex flex-col gap-1">
           <label htmlFor="valor">Valor (€)</label>
           <input
@@ -35,6 +57,7 @@ export function NovaTransacaoForm({
             id="valor"
             step="0.01"
             min="0"
+            defaultValue={transacao.valor}
             required
           />
         </div>
@@ -45,9 +68,10 @@ export function NovaTransacaoForm({
             className="rounded-sm p-2"
             name="categoria_id"
             id="categoria_id"
+            defaultValue={transacao.categoria_id}
             required
           >
-            {categorias.map((cat) => (
+            {categorias?.map((cat) => (
               <option key={cat.id} value={cat.id}>
                 {cat.nome}
               </option>
@@ -62,6 +86,7 @@ export function NovaTransacaoForm({
             type="text"
             name="descricao"
             id="descricao"
+            defaultValue={transacao.descricao ?? ""}
           />
         </div>
 
@@ -72,6 +97,7 @@ export function NovaTransacaoForm({
             type="date"
             name="data"
             id="data"
+            defaultValue={transacao.data}
             required
           />
         </div>
@@ -90,5 +116,19 @@ export function NovaTransacaoForm({
         </Link>
       </form>
     </div>
+  );
+}
+
+export default async function EditarTransacaoPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  return (
+    <Suspense fallback={<p>A carregar...</p>}>
+      <FormularioEditar id={id} />
+    </Suspense>
   );
 }

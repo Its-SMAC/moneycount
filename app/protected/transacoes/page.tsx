@@ -1,7 +1,9 @@
 import { createClient } from "@/lib/supabase/server";
+import { Trash2 } from "lucide-react";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import Link from "next/link";
+import { apagarTransacao } from "./actions";
 
 async function ListaTransacoes() {
   const supabase = await createClient();
@@ -9,7 +11,7 @@ async function ListaTransacoes() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("auth/login");
+  if (!user) redirect("/auth/login");
 
   const { data: transacoes } = await supabase
     .from("transacoes")
@@ -29,25 +31,37 @@ async function ListaTransacoes() {
           key={t.id}
           className="flex justify-between items-center p-4 rounded-lg border"
         >
-          <div className="flex flex-col">
+          <Link
+            href={`/protected/transacoes/${t.id}/editar`}
+            className="flex flex-col flex-1"
+          >
             <span className="font-medium">
               {t.descricao || "Sem descrição"}
             </span>
             <span className="text-sm text-muted-foreground">
-              {t.categorias?.nome} ·{" "}
+              {(t.categorias as unknown as { nome: string } | null)?.nome} ·{" "}
               {new Date(t.data).toLocaleDateString("pt-PT")}
             </span>
-          </div>
+          </Link>
           <span
             className={
               t.tipo === "receita"
-                ? "text-green-700 font-bold"
-                : "text-red-800 font-bold"
+                ? "text-green-700 font-bold m-2"
+                : "text-red-800 font-bold m-2"
             }
           >
             {t.tipo === "receita" ? "+" : "-"}
             {Number(t.valor).toFixed(2)}€
           </span>
+          <form action={apagarTransacao}>
+            <input type="hidden" name="id" value={t.id} />
+            <button
+              className="text-red-500 hover:text-red-400 transition-colors duration-200 p-2"
+              type="submit"
+            >
+              <Trash2 size={16} />
+            </button>
+          </form>
         </div>
       ))}
     </div>
@@ -61,7 +75,7 @@ export default function TransacoesPage() {
         <h1 className="text-4xl font-bold">Transações</h1>
         <Link
           href="/protected/transacoes/nova"
-          className="bg-slate-700 px-2 py-2 m-2 rounded-lg hover:bg-slate-600 transition-colors duration-200"
+          className="bg-slate-700 px-4 py-2 rounded-lg hover:bg-slate-600 transition-colors duration-200 whitespace-nowrap text-white"
         >
           + Nova
         </Link>
