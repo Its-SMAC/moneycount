@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { Geist } from "next/font/google";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -11,8 +11,13 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "MoneyCount",
   description: "Gestor financeiro pessoal",
+  manifest: "/manifest.json",
+  themeColor: "#000000",
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/icon-192.png",
+  },
 };
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   display: "swap",

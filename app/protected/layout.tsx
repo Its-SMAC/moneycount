@@ -3,6 +3,7 @@ import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 import { Suspense } from "react";
+import Image from "next/image";
 
 export default function ProtectedLayout({
   children,
@@ -37,6 +38,23 @@ export default function ProtectedLayout({
           {children}
         </div>
       </div>
+      <footer className="w-full flex items-center justify-center py-4 text-xs text-muted-foreground gap-2 border-t">
+        Feito por{" "}
+        <a
+          href="https://github.com/Its-SMAC"
+          target="_blank"
+          className="flex items-center gap-1 hover:opacity-80 transition-opacity"
+        >
+          <Image
+            src="/santiago.png"
+            alt="Santiago Amador"
+            width={20}
+            height={20}
+            className="rounded-full"
+          />
+          SMAC
+        </a>
+      </footer>
     </main>
   );
 }
