@@ -78,16 +78,18 @@ async function Dashboard() {
         </div>
 
         {transacoes?.length === 0 && (
-          <p className="text-center text-muted-foreground">
-            Sem transações este mês.
-          </p>
-          <Link
-            href="/protected/transacoes"
-            className="text-sm text-muted-foreground hover:underline"
-          >
-            Adicionar transação
-          </Link>
-        )}
+  <div className="flex flex-col items-center gap-2">
+    <p className="text-center text-muted-foreground">
+      Sem transações este mês.
+    </p>
+    <Link
+      href="/protected/transacoes"
+      className="text-sm text-muted-foreground hover:underline"
+    >
+      Adicionar transação
+    </Link>
+  </div>
+)}
 
         {transacoes?.slice(0, 5).map((t) => (
           <div
