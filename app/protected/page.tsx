@@ -81,12 +81,12 @@ async function Dashboard() {
           <p className="text-center text-muted-foreground">
             Sem transações este mês.
           </p>
-          <a
+          <Link
             href="/protected/transacoes"
             className="text-sm text-muted-foreground hover:underline"
           >
             Adicionar transação
-          </a>
+          </Link>
         )}
 
         {transacoes?.slice(0, 5).map((t) => (
