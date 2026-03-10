@@ -19,7 +19,6 @@ const CORES = [
 ];
 
 export function DespesasPorCategoria({ dados }: Props) {
-  console.log("dadosGrafico", dados);
   if (!dados || dados.length === 0) return null;
 
   const total = dados.reduce((acc, d) => acc + d.valor, 0);
