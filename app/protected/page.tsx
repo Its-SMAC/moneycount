@@ -1,4 +1,5 @@
-import { SaldoDonutWrapper } from "@/components/saldo-donut-wrapper";
+import { DespesasPorCategoria } from "@/components/saldo-categorias-donut";
+import { SaldoDonut } from "@/components/saldo-donut";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -37,6 +38,31 @@ async function Dashboard() {
       ?.filter((t) => t.tipo === "despesa")
       .reduce((acc, t) => acc + Number(t.valor), 0) ?? 0;
 
+  const { data: despesasPorCategoria } = await supabase
+    .from("transacoes")
+    .select("valor, categorias(nome)")
+    .eq("user_id", user.id)
+    .eq("tipo", "despesa")
+    .gte("data", primeiroDiaMes)
+    .lte("data", ultimoDiaMes);
+
+  const categoriasTotais = despesasPorCategoria?.reduce(
+    (acc, t) => {
+      const nome =
+        (t.categorias as unknown as { nome: string } | null)?.nome ?? "Outros";
+      acc[nome] = (acc[nome] ?? 0) + Number(t.valor);
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+
+  const dadosGrafico = Object.entries(categoriasTotais ?? {}).map(
+    ([nome, valor]) => ({
+      nome,
+      valor,
+    }),
+  );
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex justify-between items-center">
@@ -47,8 +73,8 @@ async function Dashboard() {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 items-center">
-        <SaldoDonutWrapper receitas={receitas} despesas={despesas} />
-        <div className="flex flex-col gap-4 flex-1">
+        <SaldoDonut receitas={receitas} despesas={despesas} />
+        <div className="flex flex-col gap-4 flex-1 mr-10">
           <div className="flex flex-col gap-1 p-4 rounded-lg border">
             <span className="text-sm text-muted-foreground">Receitas</span>
             <span className="text-2xl font-bold text-green-500">
@@ -64,6 +90,7 @@ async function Dashboard() {
             </span>
           </div>
         </div>
+        <DespesasPorCategoria dados={dadosGrafico} />
       </div>
 
       <div className="flex flex-col gap-4">
@@ -78,18 +105,18 @@ async function Dashboard() {
         </div>
 
         {transacoes?.length === 0 && (
-  <div className="flex flex-col items-center gap-2">
-    <p className="text-center text-muted-foreground">
-      Sem transações este mês.
-    </p>
-    <Link
-      href="/protected/transacoes/nova"
-      className="text-sm text-foreground hover:underline"
-    >
-      Adicionar transação
-    </Link>
-  </div>
-)}
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-center text-muted-foreground">
+              Sem transações este mês.
+            </p>
+            <Link
+              href="/protected/transacoes/nova"
+              className="text-sm text-foreground hover:underline"
+            >
+              Adicionar transação
+            </Link>
+          </div>
+        )}
 
         {transacoes?.slice(0, 5).map((t) => (
           <div
