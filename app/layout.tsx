@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
   title: "MoneyCount",
   description: "Gestor financeiro pessoal",
-  manifest: "/manifest.json",
   icons: {
     icon: "/icon-192.png",
     apple: "/icon-192.png",
@@ -30,6 +29,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body className={`${geistSans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
