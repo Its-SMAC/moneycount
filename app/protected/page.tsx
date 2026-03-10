@@ -83,8 +83,8 @@ async function Dashboard() {
       Sem transações este mês.
     </p>
     <Link
-      href="/protected/transacoes"
-      className="text-sm text-muted-foreground hover:underline"
+      href="/protected/transacoes/nova"
+      className="text-sm text-foreground hover:underline"
     >
       Adicionar transação
     </Link>
