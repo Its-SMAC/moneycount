@@ -9,7 +9,13 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
+  title: "MoneyCount",
+  description: "Gestor financeiro pessoal",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/icon-192.png",
+  },
 };
 const geistSans = Geist({
   variable: "--font-geist-sans",
